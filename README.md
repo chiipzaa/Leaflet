@@ -7,8 +7,21 @@
 
 
 ### VScode Extention (recommend)
-- [https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer](Live Server) เป็นตัวช่วยในการรันไฟล์ html และ javascript
-- HTML Snippets เป็นตัวช่วยในการสร้าง code HTML
-- Code Outline เป็นตัวช่วยในการดู Code ให้ง่ายขึ้น
-- jQuery Code Snippets เป็นตัวช่วยในการสร้าง code jquery
+- [Live Server] เป็นตัวช่วยในการรันไฟล์ html และ javascript
+- [HTML Snippets] เป็นตัวช่วยในการสร้าง code HTML
+- [Code Outline] เป็นตัวช่วยในการดู Code ให้ง่ายขึ้น
+- [jQuery Code Snippets] เป็นตัวช่วยในการสร้าง code jquery
 
+
+
+
+
+
+[jQuery Code Snippets]:https://marketplace.visualstudio.com/items?itemName=donjayamanne.jquerysnippets
+
+
+[Code Outline]:https://marketplace.visualstudio.com/items?itemName=patrys.vscode-code-outline
+
+[HTML Snippets]:https://marketplace.visualstudio.com/items?itemName=abusaidm.html-snippets
+
+[Live Server]:https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer
