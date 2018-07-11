@@ -14,6 +14,23 @@
 - [Code Outline] เป็นตัวช่วยในการดู Code ให้ง่ายขึ้น
 - [jQuery Code Snippets] เป็นตัวช่วยในการสร้าง code jquery
 
+### Start!!
+#### เริ่มต้นที่ basic map
+- สร้างหน้า html
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Basic map!</title>
+</head>
+<body>   
+</body>  
+</html>
+```
 
 
 
