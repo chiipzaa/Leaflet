@@ -31,6 +31,29 @@
 </body>  
 </html>
 ```
+- สร้าง map อย่างง่ายกัน เพิ่ม css กำหนดความสูง ความกว้าง
+```css
+        #mapid{
+            height: 100vh;
+            width: 100vh;
+        }
+```
+- สร้าง script เพื่อแสดง  map
+```js
+var mymap = L.map('mapid').setView([13.753256, 100.500082], 5);
+        
+        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+            maxZoom: 18,
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+                '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+                'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            id: 'mapbox.streets'
+        }).addTo(mymap);
+```
+- เพิ่ม ส่วนแสดงผลใน html
+```html
+<div class="" id="mapid"></div>
+```
 
 
 
