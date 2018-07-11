@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Basic map! with event</title>
+    <title>Basic map! with Region and Province</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
         crossorigin="" />
     <!-- Make sure you put this AFTER Leaflet's CSS -->
@@ -28,22 +28,8 @@
     <div class="" id="mapid"></div>
 
     <script>
-        //var mymap = L.map('mapid').setView([13.849895, 100.529282], 5);
-        var mymap;
+        var mymap = L.map('mapid').setView([13.849895, 100.529282], 5);
 
-        /* 
-        //map from mapbox.com
-        L.tileLayer(
-            'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-                maxZoom: 18,
-                attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-                    '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-                    'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-                id: 'mapbox.streets'
-                //id: 'mapbox.light'
-            }).addTo(mymap);
-        */
-        
         //map from openstreetmap.org
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -80,14 +66,36 @@
         // and change style color
         // and add to map
         var dataMap1 = L.geoJSON(mapArea,{
-            style: styleLayer1 // chang style color from data kpi
+            style: styleLayer1, // chang style color from data kpi
+            onEachFeature: onEachHilightFeature
         }).addTo(mymap);
 
-        mymap.setMaxBounds(mymap.getBounds()); //set center of map
         
+        var regionMapLayer;
+        function clickLayer1(e){
+            //console.log(e.target);
+            var regionId = e.target.feature.properties.id;
+            //console.log(e.target.feature.properties.id);
+            var regionMapUrl = "http://opendata.service.moph.go.th/gis/v1/geojson/2/" + regionId;
+            $.ajax({
+                type: 'get',
+                url: regionMapUrl,
+                async: false,
+                success: function(response){
+                    console.log(response);
+                    regionMapLayer = response;
+                }
+            });
+        }
 
-        // console.log(mapArea);
-        // console.log(dataArea);
+        // Map Layer Region
+        var dataMap2 = L.geoJSON(regionMapLayer,{
+            style: styleLayer1, // chang style color from data kpi
+            onEachFeature: onEachHilightFeature
+        }).addTo(mymap);
+        console.log(regionMapLayer);
+    
+
 
         function styleLayer1(feature){
             //console.log(feature);
@@ -95,14 +103,35 @@
             return {
                 //fillColor: 'Red', //สีพื้น
                 fillColor: getColor(getDataLayer1(id)), //สีพื้น
-                fillOpacity: 0.8, // ความทึบแสง ค่า 0.0 - 1.0
+                fillOpacity: 0.5, // ความทึบแสง ค่า 0.0 - 1.0
                 color: '#00FF00',
-                opacity: 0.8,
+                opacity: 0.4,
                 weight: 1,
                 dashArray:3,  
             }   
         };
 
+        function onEachHilightFeature(feature, layer){
+            layer.on({
+                mouseover: hilightFeature , 
+                mouseout: resetHiligthFeature,
+                click: clickLayer1
+            });
+        }
+        
+        function resetHiligthFeature(e){
+            dataMap1.resetStyle(e.target);
+        }
+        
+        function hilightFeature(e){
+            var layer = e.target;
+            //console.log(e.target);
+            layer.setStyle({
+                fillOpacity: 0.8,
+                weight:3
+            });
+        }
+        
         function getDataLayer1(id){
             var result;
             dataArea.forEach(function(data){
@@ -113,7 +142,7 @@
             //console.log(result);
             return result;
         }
-
+        
         function getColor(d){
             return d >= 80 ? 'Green':
                 d >= 60 ? 'DarkOrange':

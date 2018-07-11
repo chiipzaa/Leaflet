@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Basic map! with event</title>
+    <title>Basic map! with Hilight</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
         crossorigin="" />
     <!-- Make sure you put this AFTER Leaflet's CSS -->
@@ -100,8 +100,13 @@
         function onEachHilightFeature(feature, layer){
             layer.on({
                 mouseover: hilightFeature , 
-                mouseout: resetHiligthFeature
+                mouseout: resetHiligthFeature,
+                click: clickLayer1
             });
+        }
+
+        function clickLayer1(e){
+            console.log(e.target);
         }
         function resetHiligthFeature(e){
             dataMap1.resetStyle(e.target);
