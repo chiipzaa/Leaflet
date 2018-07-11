@@ -6,4 +6,9 @@
 - https://docs.google.com/document/d/1csqmVG97knOOLjy1qcdPyqHYOF-fViCanDSZCe4z6kk
 
 
+### VScode Extention (recommend)
+- [https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer](Live Server) เป็นตัวช่วยในการรันไฟล์ html และ javascript
+- HTML Snippets เป็นตัวช่วยในการสร้าง code HTML
+- Code Outline เป็นตัวช่วยในการดู Code ให้ง่ายขึ้น
+- jQuery Code Snippets เป็นตัวช่วยในการสร้าง code jquery
 
