@@ -79,12 +79,9 @@
         // and change style color
         // and add to map
         var dataMap1 = L.geoJSON(mapArea,{
-            style: styleLayer1 // chang style color from data kpi
+            style: styleLayer1, // chang style color from data kpi
+            onEachFeature: onEachHilightFeature
         }).addTo(mymap);
-        
-
-        // console.log(mapArea);
-        // console.log(dataArea);
 
         function styleLayer1(feature){
             //console.log(feature);
@@ -92,13 +89,32 @@
             return {
                 //fillColor: 'Red', //สีพื้น
                 fillColor: getColor(getDataLayer1(id)), //สีพื้น
-                fillOpacity: 0.8, // ความทึบแสง ค่า 0.0 - 1.0
+                fillOpacity: 0.5, // ความทึบแสง ค่า 0.0 - 1.0
                 color: '#00FF00',
-                opacity: 0.8,
+                opacity: 0.4,
                 weight: 1,
                 dashArray:3,  
             }   
         };
+    
+        function onEachHilightFeature(feature, layer){
+            layer.on({
+                mouseover: hilightFeature , 
+                mouseout: resetHiligthFeature
+            });
+        }
+        function resetHiligthFeature(e){
+            dataMap1.resetStyle(e.target);
+        }
+
+        function hilightFeature(e){
+            var layer = e.target;
+            //console.log(e.target);
+            layer.setStyle({
+                fillOpacity: 0.8,
+                weight:3
+            });
+        }
 
         function getDataLayer1(id){
             var result;
