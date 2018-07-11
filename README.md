@@ -54,7 +54,7 @@ var mymap = L.map('mapid').setView([13.753256, 100.500082], 5);
 ```html
 <div class="" id="mapid"></div>
 ```
-ตัวอย่าง Code ดู [basic.html](basci.html)
+ตัวอย่าง Code ดู [basic.html](basic.html)
 
 
 
