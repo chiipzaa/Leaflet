@@ -61,6 +61,11 @@
             margin-right: 8px;
             opacity: 0.7;
         }
+        .my-leaflet-tooltip{
+            border: none;
+            background: none;
+            box-shadow:none;  
+        }
         
         
         
@@ -124,7 +129,7 @@
         var areaLayer1;
         var listDataLayer1;
         var geojsonLayer1;
-
+        
         var areaLayer2;
         var listDataLayer2;
         var geojsonLayer2;
@@ -141,11 +146,22 @@
         var listDataLayer5;
         var geojsonLayer5;
 
+        var listMarkerLayer1;
+        var markersL1Group = new L.FeatureGroup();
+        var listMarkerLayer2;
+        var markersL2Group = new L.FeatureGroup();
+        var listMarkerLayer3;
+        var markersL3Group = new L.FeatureGroup();
+        var listMarkerLayer4;
+        var markersL4Group = new L.FeatureGroup();
+        
+
         // Get Map
         var mapUrlRegionAll = "http://opendata.service.moph.go.th/gis/v1/geojson/1";
         var mapUrlProvinceInRegion = "http://opendata.service.moph.go.th/gis/v1/geojson/2/";
         var mapUrlProvince = "http://opendata.service.moph.go.th/gis/v1/geojson/3/";
         var mapUrlTambon = "http://opendata.service.moph.go.th/gis/v1/geojson/5/";
+        var mapUrlTambonHosp = "http://opendata.service.moph.go.th/gis/v1/geojson/5/";
 
         // Data Kpi Demo
         var dataUrlRegionAll = "http://203.157.19.160/kpi-test/api/v1/kpi/1";
@@ -179,9 +195,22 @@
             style: styleLayer1,
             onEachFeature: onEachFeatureLayer1
         }).addTo(mymap);
+        mymap.addLayer(markersL1Group)
         mymap.fitBounds(geojsonLayer1.getBounds());
 
         function onEachFeatureLayer1(feature, layer) {
+            var center = layer.getBounds().getCenter();
+            listMarkerLayer1 = L.circle(center,{
+                radius:0,
+                weight:0
+            })
+            .bindTooltip("<b>"+feature.properties.name+"</b>",{
+                permanent:true,
+                direction:'center',
+                className: 'my-leaflet-tooltip'
+            });
+            markersL1Group.addLayer(listMarkerLayer1);
+        
             layer.on({
                 mouseover: highlightFeature,
                 mouseout: resetHighlight,
@@ -190,6 +219,18 @@
         }
 
         function onEachFeatureLayer2(feature, layer) {
+            var center = layer.getBounds().getCenter();
+            listMarkerLayer2 = L.circle(center,{
+                radius:0,
+                weight:0
+            })
+            .bindTooltip("<b>"+feature.properties.name+"</b>",{
+                permanent:true,
+                direction:'center',
+                className: 'my-leaflet-tooltip'
+            });
+            markersL2Group.addLayer(listMarkerLayer2);
+            
             layer.on({
                 mouseover: highlightFeature,
                 mouseout: resetHighlight,
@@ -198,6 +239,17 @@
         }
 
         function onEachFeatureLayer3(feature, layer) {
+            var center = layer.getBounds().getCenter();
+            listMarkerLayer3 = L.circle(center,{
+                radius:0,
+                weight:0
+            })
+            .bindTooltip("<b>"+feature.properties.name+"</b>",{
+                permanent:true,
+                direction:'center',
+                className: 'my-leaflet-tooltip'
+            });
+            markersL3Group.addLayer(listMarkerLayer3);
             layer.on({
                 mouseover: highlightFeature,
                 mouseout: resetHighlight,
@@ -206,6 +258,17 @@
         }
 
         function onEachFeatureLayer4(feature, layer) {
+            var center = layer.getBounds().getCenter();
+            listMarkerLayer4 = L.circle(center,{
+                radius:0,
+                weight:0
+            })
+            .bindTooltip("<b>"+feature.properties.name+"</b>",{
+                permanent:true,
+                direction:'center',
+                className: 'my-leaflet-tooltip'
+            });
+            markersL4Group.addLayer(listMarkerLayer4);
             layer.on({
                 mouseover: highlightFeature,
                 mouseout: resetHighlight,
@@ -310,14 +373,29 @@
 
         function highlightFeature(e) {
             var layer = e.target; // พื้นที่เม้าไปวาง
+            var properties = layer.feature.properties;
+
+            if (mymap.hasLayer(geojsonLayer4)) {
+                properties.data =  getDataLayer4(properties.id);
+            } else if (mymap.hasLayer(geojsonLayer3)) {
+                properties.data =  getDataLayer3(properties.id);
+            } else if (mymap.hasLayer(geojsonLayer2)) {
+                properties.data =  getDataLayer2(properties.id);
+            } else {
+                properties.data =  getDataLayer1(properties.id);
+            }
+
+            info.update(properties);
             // console.log(e.target);
             layer.setStyle({
                 fillOpacity: 0.9,
                 weight: 4
             });
+            
         }
 
         function resetHighlight(e) {
+            
             if (mymap.hasLayer(geojsonLayer4)) {
                 geojsonLayer4.resetStyle(e.target);
             } else if (mymap.hasLayer(geojsonLayer3)) {
@@ -327,6 +405,9 @@
             } else {
                 geojsonLayer1.resetStyle(e.target);
             }
+            info.update();
+            
+
 
         }
 
@@ -358,6 +439,8 @@
             mymap.fitBounds(geojsonLayer2.getBounds());
             mymap.removeLayer(geojsonLayer1);
             backL1Button.addTo(mymap);
+            mymap.removeLayer(markersL1Group);
+            mymap.addLayer(markersL2Group);        
         }
 
 
@@ -365,7 +448,7 @@
             var id = e.target.feature.properties.id;
             //console.log(e.target.feature.properties.type);
             //console.log(id);
-
+            
             $.ajax({
                 type: "get",
                 url: mapUrlProvince + id,
@@ -395,13 +478,19 @@
             mymap.removeLayer(geojsonLayer2);
             backL1Button.removeFrom(mymap);
             backL2Button.addTo(mymap);
+            mymap.removeLayer(markersL2Group);
+            mymap.addLayer(markersL3Group);
 
         }
 
         function clickLayer3(e) {
             var id = e.target.feature.properties.id;
             //console.log(e.target.feature.properties.type);
-            //console.log(id);
+            console.log(id);
+            var provcode = id.substring(0, 2);
+            var distcode = id.substring(2, 4);
+            console.log(provcode);
+            console.log(distcode);
 
             $.ajax({
                 type: "get",
@@ -432,13 +521,16 @@
             mymap.removeLayer(geojsonLayer3);
             backL2Button.removeFrom(mymap);
             backL3Button.addTo(mymap);
+            mymap.removeLayer(markersL3Group);
+            mymap.addLayer(markersL4Group);
+            
 
         }
 
         function clickLayer4(e) {
             var id = e.target.feature.properties.id;
             //console.log(e.target.feature.properties.type);
-            console.log(id);
+            //console.log(id);
 
             /*
             $.ajax({
@@ -481,6 +573,8 @@
             mymap.addLayer(geojsonLayer1); // 2
             mymap.fitBounds(geojsonLayer1.getBounds()); // 3 
             backL1Button.removeFrom(mymap);
+            mymap.addLayer(markersL1Group);
+            mymap.removeLayer(markersL2Group);
         });
         var backL2Button = L.easyButton('fa-arrow-left', function (btn, map) {
             mymap.removeLayer(geojsonLayer3); // 1 
@@ -488,6 +582,8 @@
             mymap.fitBounds(geojsonLayer2.getBounds()); // 3 
             backL2Button.removeFrom(mymap);
             backL1Button.addTo(mymap);
+            mymap.addLayer(markersL2Group);
+            mymap.removeLayer(markersL3Group);
         });
         var backL3Button = L.easyButton('fa-arrow-left', function (btn, map) {
             mymap.removeLayer(geojsonLayer4); // 1 
@@ -495,7 +591,10 @@
             mymap.fitBounds(geojsonLayer3.getBounds()); // 3 
             backL3Button.removeFrom(mymap);
             backL2Button.addTo(mymap);
+            mymap.addLayer(markersL3Group);
+            mymap.removeLayer(markersL4Group);
         });
+
         var legend = L.control({
             position: 'bottomright'
         });
@@ -508,6 +607,22 @@
             return div;
         };
         legend.addTo(mymap);
+
+        var info = L.control();
+        info.onAdd = function (map) {
+            this._div = L.DomUtil.create('div', 'info'); 
+            this.update();
+            return this._div;
+        };
+        info.update = function (props) {
+            //console.log(props);
+            this._div.innerHTML = '<h4>MOPH KPI</h4>' +  (props ?
+                '<b>' + props.name + '</b><br />' + props.data + '%'
+                : 'เลื่อนเมาส์(Mouse Over)ไปบนแผนที่');
+        };
+        info.addTo(mymap);
+        
+        
     
     </script>
 </body>

@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title></title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- Include Leaflet CSS file in the head section of your document -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
+        crossorigin="" />
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js" integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw=="
+        crossorigin=""></script>
+    <!-- Add button(s), icon(s) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css">
+    <script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+
+    <style>
+        #mapid {
+            width: 800px;
+            height: 100vh;
+        }
+
+        .center {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 100%;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!-- Put a div element with a certain id where you want your map to be -->
+    <div id="mapid"></div>
+    <script>
+        var mymap = L.map('mapid').setView([13.850301, 100.529272], 6);
+        L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: ' &copy; <a href="http://openstreetmap.org">' +
+                ' OpenStreetMap</a>',
+            maxZoom: 18
+        }).addTo(mymap);
+
+        // #5
+        var kpiStyleLayer1;
+        var areaLayer1;
+        var listDataLayer1;
+        var geojsonLayer1;
+        //
+        var kpiStyleLayer2;
+        var areaLayer2;
+        var listDataLayer2;
+        var geojsonLayer2;
+        //
+        var kpiStyleLayer3;
+        var areaLayer3;
+        var listDataLayer3;
+        var geojsonLayer3;
+        //
+        var kpiStyleLayer4;
+        var areaLayer4;
+        var listDataLayer4;
+        var geojsonLayer4;
+        //
+        var backButton;
+
+        $.ajax({
+            type: "get",
+            url: "http://opendata.service.moph.go.th/gis/v1/geojson/1",
+            async: false,
+            success: function (response) {
+                console.log(response); // #7
+                areaLayer1 = response; // #8
+
+            }
+        });
+        
+        // #6
+        $.ajax({
+            type: "get",
+            url: "http://203.157.19.160/kpi-test/api/v1/kpi/1",
+            async: false,
+            success: function (response) {
+                console.log(response); // #7
+                listDataLayer1 = response; // #8
+            }
+        });
+
+        function getKpiDataLayer1(id) {
+            var kpiResult;
+            listDataLayer1.forEach(function (kpiData) {
+                if (id == kpiData.id)
+                    kpiResult = kpiData.data;
+            });
+            return kpiResult;
+        } //end getKpiDataLayer1
+
+        function getKpiDataLayer2(id) {
+            var kpiResult;
+            listDataLayer2.forEach(function (kpiData) {
+                if (id == kpiData.id)
+                    kpiResult = kpiData.data;
+            });
+            return kpiResult;
+        } //end getKpiDataLayer2
+
+        function getKpiDataLayer3(id) {
+            var kpiResult;
+            listDataLayer3.forEach(function (kpiData) {
+                if (id == kpiData.id)
+                    kpiResult = kpiData.data;
+            });
+            return kpiResult;
+        } //end getKpiDataLayer3
+
+        function getKpiDataLayer4(id) {
+            var kpiResult;
+            listDataLayer4.forEach(function (kpiData) {
+                if (id == kpiData.id)
+                    kpiResult = kpiData.data;
+            });
+            return kpiResult;
+        } //end getKpiDataLayer4
+
+        function getKpiColor(kpiData) {
+            var kpiColor;
+            kpiColor = kpiData >= 80 ? 'Green' :
+                kpiData >= 60 ? 'DarkOrange' :
+                kpiData >= 40 ? 'DarkRed' :
+                "Red";
+            return kpiColor;
+        } //end getKpiColor
+
+        function kpiStyleLayer1(feature) {
+            console.log(feature);
+            var id = feature.properties.id;
+            return {
+                //fillColor: "#ff0000", // Background color
+                //fillColor: getKpiColor(60), // Background color
+                fillColor: getKpiColor(getKpiDataLayer1(id)), // Background color
+                fillOpacity: 1, // Background color Opacify range 0.0-1.0 
+                color: "#069e06", // Border color
+                opacity: 1, // Line Opacify range 0.0-1.0 
+                weight: 1, // Line weight
+                dashArray: 3 // Dashed lise 
+            }
+        } //end kpiStyleLayer1
+
+        function kpiStyleLayer2(feature) {
+            console.log(feature);
+            var id = feature.properties.id;
+            return {
+                //fillColor: "#ff0000", // Background color
+                //fillColor: getKpiColor(60), // Background color
+                fillColor: getKpiColor(getKpiDataLayer2(id)), // Background color
+                fillOpacity: 1, // Background color Opacify range 0.0-1.0 
+                color: "#069e06", // Border color
+                opacity: 1, // Line Opacify range 0.0-1.0 
+                weight: 1, // Line weight
+                dashArray: 3 // Dashed lise 
+            }
+        } //end kpiStyleLayer2
+
+        function kpiStyleLayer3(feature) {
+            console.log(feature);
+            var id = feature.properties.id;
+            return {
+                //fillColor: "#ff0000", // Background color
+                //fillColor: getKpiColor(60), // Background color
+                fillColor: getKpiColor(getKpiDataLayer3(id)), // Background color
+                fillOpacity: 1, // Background color Opacify range 0.0-1.0 
+                color: "#069e06", // Border color
+                opacity: 1, // Line Opacify range 0.0-1.0 
+                weight: 1, // Line weight
+                dashArray: 3 // Dashed lise 
+            }
+        } //end kpiStyleLayer3
+
+        function kpiStyleLayer4(feature) {
+            console.log(feature);
+            var id = feature.properties.id;
+            var data = getKpiDataLayer4(id); // #1
+            return {
+                fillColor: data ? getKpiColor(data) : "White", // #2
+                fillOpacity: data ? 1 : 0, // #3
+                color: "#069e06",
+                opacity: 1, 
+                weight: 1,
+                dashArray: 3
+            }
+        } //end kpiStyleLayer4
+
+        function highlightFeature(e) {
+            var regionLayerStyle = e.target; // Each region's layer which mouse is over
+            // console.log(e.target);
+            regionLayerStyle.setStyle({
+                fillOpacity: 0.8, // Background color Opacify range 0.0-1.0 
+                weight: 3, // Line weight
+            });
+        } //end highlightFeature
+
+        // Reset hightlight color to be initialized color of layer
+        function resetHightlight(e) { // #4
+            if (mymap.hasLayer(geojsonLayer4)) {
+                geojsonLayer4.resetStyle(e.target);
+            } else if (mymap.hasLayer(geojsonLayer3)) {
+                geojsonLayer3.resetStyle(e.target);
+            } else if (mymap.hasLayer(geojsonLayer2)) {
+                geojsonLayer2.resetStyle(e.target);
+            } else {
+                geojsonLayer1.resetStyle(e.target);
+            }
+        } //end resetHightlight
+
+        function clickLayer1(e) {
+            backButton.addTo(mymap); // Add back button
+            var id = e.target.feature.properties.id;
+            console.log(e.target.feature.properties.id);
+            console.log(e.target.feature.properties.type);
+
+            // #2 Get data for layer1 (changwat's ampur boundaries)
+            $.ajax({
+                type: "get",
+                url: "http://opendata.service.moph.go.th/gis/v1/geojson/2/" + id,
+                async: false,
+                success: function (response) {
+                    console.log(response);
+                    areaLayer2 = response;
+                }
+            });
+
+            // Get data for layer2 (kpi data depends on ampur boundaries)
+            $.ajax({
+                type: "get",
+                url: "http://203.157.19.160/kpi-test/api/v1/kpi/1/zone/" + id,
+                async: false,
+                success: function (response) {
+                    console.log(response);
+                    listDataLayer2 = response;
+                }
+            });
+
+            // When click layer1, do add layer2 to map
+            geojsonLayer2 = L.geoJSON(areaLayer2, {
+                style: kpiStyleLayer2,
+                onEachFeature: onEachFeatureLayer2
+            }).addTo(mymap);
+            // Zoom to full-screen scale
+            mymap.fitBounds(geojsonLayer2.getBounds());
+            // Clear/Remove layer1
+            mymap.removeLayer(geojsonLayer1);
+
+        } //end clickLayer1
+
+        function clickLayer2(e) {
+
+            // backButton.addTo(mymap); // Layer 2 not Add back button
+            var id = e.target.feature.properties.id;
+            console.log(e.target.feature.properties.id);
+            console.log(e.target.feature.properties.type);
+
+            // Get data for layer1 (changwat's ampur boundaries)
+            $.ajax({
+                type: "get",
+                url: "http://opendata.service.moph.go.th/gis/v1/geojson/3/" + id,
+                async: false,
+                success: function (response) {
+                    console.log(response);
+                    areaLayer3 = response;
+                }
+            });
+
+            // Get data for layer3 (kpi data depends on ampur boundaries)
+            $.ajax({
+                type: "get",
+                url: "http://203.157.19.160/kpi-test/api/v1/kpi/1/province/" + id,
+                async: false,
+                success: function (response) {
+                    console.log(response);
+                    listDataLayer3 = response;
+                }
+            });
+
+            // When click layer2, do add layer3 to map
+            geojsonLayer3 = L.geoJSON(areaLayer3, {
+                style: kpiStyleLayer3,
+                onEachFeature: onEachFeatureLayer3
+            }).addTo(mymap);
+            // Zoom to full-screen scale
+            mymap.fitBounds(geojsonLayer3.getBounds());
+            // Clear/Remove layer2
+            mymap.removeLayer(geojsonLayer2);
+
+        } //end clickLayer2
+
+        function clickLayer3(e) {
+            // backButton.addTo(mymap); // Layer 3 not Add back button
+            var id = e.target.feature.properties.id;
+            console.log(e.target.feature.properties.id);
+            console.log(e.target.feature.properties.type);
+
+            // Get data for layer1 (ampur's tambon boundaries)
+            //http://opendata.service.moph.go.th/gis/v1/geojson/4/" + id,
+            // Get data for layer1 (ampur's tambon LAT/LNG)
+            http: //opendata.service.moph.go.th/gis/v1/geojson/5/" + id,
+                $.ajax({
+                    type: "get",
+                    url: "http://opendata.service.moph.go.th/gis/v1/geojson/5/" + id,
+                    async: false,
+                    success: function (response) {
+                        console.log(response);
+                        areaLayer4 = response;
+                    }
+                });
+
+            // Create data ourselves for layer4
+            //listDataLayer4 = new Array();
+            listDataLayer4 = [{
+                    'id': '300101',
+                    'data': '50'
+                },
+                {
+                    'id': '300102',
+                    'data': '55'
+                },
+                {
+                    'id': '300103',
+                    'data': '60'
+                },
+                {
+                    'id': '300104',
+                    'data': '65'
+                },
+                {
+                    'id': '300105',
+                    'data': '70'
+                },
+                {
+                    'id': '300106',
+                    'data': '75'
+                },
+                {
+                    'id': '300201',
+                    'data': '80'
+                },
+                {
+                    'id': '300202',
+                    'data': '85'
+                },
+                {
+                    'id': '300203',
+                    'data': '90'
+                },
+                {
+                    'id': '300204',
+                    'data': '95'
+                },
+                {
+                    'id': '300301',
+                    'data': '50'
+                },
+                {
+                    'id': '300302',
+                    'data': '55'
+                },
+                {
+                    'id': '300401',
+                    'data': '60'
+                },
+                {
+                    'id': '300402',
+                    'data': '65'
+                },
+                {
+                    'id': '300501',
+                    'data': '70'
+                },
+                {
+                    'id': '300502',
+                    'data': '75'
+                },
+            ];
+
+            // When click layer3, do add layer4 to map
+            geojsonLayer4 = L.geoJSON(areaLayer4, {
+                style: kpiStyleLayer4,
+                // Hightlight, Mouse-Events
+                onEachFeature: onEachFeatureLayer4
+            }).addTo(mymap);
+            // Zoom to full-screen scale
+            mymap.fitBounds(geojsonLayer4.getBounds());
+            // Clear/Remove layer3
+            mymap.removeLayer(geojsonLayer3);
+
+        } //end clickLayer3
+
+        function clickLayer4(e) {
+            // backButton.addTo(mymap); // Layer 4 not Add back button
+            var id = e.target.feature.properties.id;
+            console.log(e.target.feature.properties.id);
+            console.log(e.target.feature.properties.type);
+
+            // Zoom to full-screen scale
+            mymap.fitBounds(geojsonLayer4.getBounds());
+            // Clear/Remove layer3
+            mymap.removeLayer(geojsonLayer3);
+
+        } //end clickLayer4
+
+        function onEachFeatureLayer1(feature, layer) {
+            layer.on({
+                // Listen to any mouse events
+                mouseover: highlightFeature, // Mouse over event
+                mouseout: resetHightlight, // #3 Reset hightlight
+                click: clickLayer1
+            });
+        } //end onEachFeatureLayer1
+
+        // #2
+        function onEachFeatureLayer2(feature, layer) {
+            layer.on({
+                // Listen to any mouse events
+                mouseover: highlightFeature, // Mouse over event
+                mouseout: resetHightlight, // #3 Reset hightlight
+                click: clickLayer2
+            });
+        } //end onEachFeatureLayer2
+
+        // #2
+        function onEachFeatureLayer3(feature, layer) {
+            layer.on({
+                // Listen to any mouse events
+                mouseover: highlightFeature, // Mouse over event
+                mouseout: resetHightlight, // #3 Reset hightlight
+                click: clickLayer3
+            });
+        } //end onEachFeatureLayer3
+
+        // #2
+        function onEachFeatureLayer4(feature, layer) {
+            layer.on({
+                // Listen to any mouse events
+                mouseover: highlightFeature, // Mouse over event
+                mouseout: resetHightlight, // #3 Reset hightlight
+                // click: clickLayer4
+            });
+        } //end onEachFeatureLayer4
+        geojsonLayer1 = L.geoJSON(areaLayer1, {
+            style: kpiStyleLayer1,
+            onEachFeature: onEachFeatureLayer1
+        }).addTo(mymap); // #4
+
+        backButton = L.easyButton('fa-arrow-left', function (btn, map) {
+            if (mymap.hasLayer(geojsonLayer4)) {
+                mymap.removeLayer(geojsonLayer4); // #1
+                mymap.addLayer(geojsonLayer3); // #2
+                // Zoom to full-screen scale
+                mymap.fitBounds(geojsonLayer3.getBounds()); // #3
+            } else if (mymap.hasLayer(geojsonLayer3)) {
+                mymap.removeLayer(geojsonLayer3); // #1
+                mymap.addLayer(geojsonLayer2); // #2
+                // Zoom to full-screen scale
+                mymap.fitBounds(geojsonLayer2.getBounds()); // #3
+            } else {
+                backButton.removeFrom(mymap); // Remove button out of map
+                mymap.removeLayer(geojsonLayer2); // #1
+                mymap.addLayer(geojsonLayer1); // #2
+                // Zoom to full-screen scale
+                mymap.fitBounds(geojsonLayer1.getBounds()); // #3
+            }
+        }) /*.addTo(mymap)*/ ;
+    </script>
+
+</body>
+
+</html>
