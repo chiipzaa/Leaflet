@@ -61,7 +61,7 @@ var mymap = L.map('mapid').setView([13.753256, 100.500082], 5);
 ```
 ตัวอย่าง Code ดู [basic.html](map_basic.html)
 
-ตัวอย่าง แบบอื่นๆ ดูจาก code หน้าอื่นๆ นะครับ
+ตัวอย่าง Code แบบหลายๆ Layer และมี Marker ประกอย  [map_d2_all.html](map_d2_all.html)
 
 
 
