@@ -10,6 +10,10 @@
 - https://docs.google.com/document/d/1csqmVG97knOOLjy1qcdPyqHYOF-fViCanDSZCe4z6kk
 - https://drive.google.com/drive/folders/1mjGP2EeVCyBlY1sX4UXqGtsiVJHLuKG4
 
+
+### ข้อมูลแผนที่จาก Open Data ภาครัฐของกระทรวงสาธารณสุข
+- http://opendata.service.moph.go.th/
+
 ### Editor (recommend)
 [Visual Studio Code](https://code.visualstudio.com/)
 
